@@ -134,7 +134,12 @@ EXPORTED_FUNCTIONS = _main,_malloc,_free,_load_state, \
                      _uprough_get_breakpoints_ptr,_uprough_get_breakpoint_count, \
                      _uprough_write_memory,_uprough_disasm, \
                      _uprough_set_reg,_uprough_set_watch,_uprough_clear_watch, \
-                     _uprough_get_chipset_regs,_uprough_chipset_snapshot_size
+                     _uprough_get_chipset_regs,_uprough_chipset_snapshot_size, \
+                     _uprough_trace_set_enabled,_uprough_trace_get_enabled, \
+                     _uprough_trace_clear,_uprough_trace_get_ptr, \
+                     _uprough_trace_get_head,_uprough_trace_get_capacity, \
+                     _uprough_set_exception_catch_mask,_uprough_get_exception_catch_mask, \
+                     _uprough_get_palette
 
 EXPORTS := Browser,callMain,cwrap,getValue,HEAPU8,FS,PATH,ERRNO_CODES,AL,abort,ENV,stringToNewUTF8,UTF8ToString,Browser,EmscriptenSendCommand,EmscriptenReceiveCommandReply,EmulatorJSGetState,EmulatorJSGetMemoryData
 
