@@ -126,7 +126,15 @@ EXPORTED_FUNCTIONS = _main,_malloc,_free,_load_state, \
                      _system_restart,_cmd_savefiles,_get_core_options,_cmd_save_state,_supports_states,_reset_cheat,_toggleMainLoop, \
                      _save_file_path,_get_disk_count,_set_current_disk,_get_current_disk,_refresh_save_files,_toggle_fastforward,_set_ff_ratio, \
                      _toggle_slow_motion,_set_sm_ratio,_toggle_rewind,_set_rewind_granularity,_get_current_frame_count,_ejs_set_keyboard_enabled, \
-                     _set_vsync,_set_video_rotation,_get_video_dimensions,EmscriptenSendCommand,EmscriptenReceiveCommandReply,_get_memory_data
+                     _set_vsync,_set_video_rotation,_get_video_dimensions,EmscriptenSendCommand,EmscriptenReceiveCommandReply,_get_memory_data, \
+                     _retro_get_memory_data,_retro_get_memory_size, \
+                     _uprough_get_cpu_regs,_uprough_cpu_snapshot_size, \
+                     _uprough_set_halt,_uprough_get_halted,_uprough_get_halt_req,_uprough_step, \
+                     _uprough_set_breakpoint,_uprough_clear_breakpoint,_uprough_clear_all_breakpoints, \
+                     _uprough_get_breakpoints_ptr,_uprough_get_breakpoint_count, \
+                     _uprough_write_memory,_uprough_disasm, \
+                     _uprough_set_reg,_uprough_set_watch,_uprough_clear_watch, \
+                     _uprough_get_chipset_regs,_uprough_chipset_snapshot_size
 
 EXPORTS := Browser,callMain,cwrap,getValue,HEAPU8,FS,PATH,ERRNO_CODES,AL,abort,ENV,stringToNewUTF8,UTF8ToString,Browser,EmscriptenSendCommand,EmscriptenReceiveCommandReply,EmulatorJSGetState,EmulatorJSGetMemoryData
 
@@ -146,7 +154,15 @@ ifeq ($(HAVE_WASMFS), 1)
    LIBS += -s WASMFS -s FORCE_FILESYSTEM=1
 endif
 
-# note: real PROXY_TO_PTHREAD is not used here; we do the pthread management ourselves
+# Two pthread proxying modes:
+#   PROXY_TO_PTHREAD=1            -> RetroArch's own manual pthread management
+#                                    (RA spawns main_pthread; canvas is transferred
+#                                    via emscripten_pthread_attr_settransferredcanvases;
+#                                    main thread runs only raf_signaler)
+#   EMSCRIPTEN_PROXY_TO_PTHREAD=1 -> emscripten's built-in PROXY_TO_PTHREAD=1
+#                                    (emscripten moves main() onto a worker, proxies
+#                                    DOM access; cleaner integration but newer)
+# Both require HAVE_THREADS=1 and OffscreenCanvas. They are mutually exclusive.
 ifeq ($(PROXY_TO_PTHREAD), 1)
    LIBS += -s OFFSCREENCANVAS_SUPPORT
    DEFINES += -DPROXY_TO_PTHREAD -DEMSCRIPTEN_STACK_SIZE=$(STACK_SIZE)
@@ -154,8 +170,23 @@ ifeq ($(PROXY_TO_PTHREAD), 1)
    override WASM_WORKERS = 1
    # use the default stack size for the browser thread; the RetroArch thread will be created with the specified stack size
    override STACK_SIZE = 4194304
+else ifeq ($(EMSCRIPTEN_PROXY_TO_PTHREAD), 1)
+   # LVLLVL fork: real emscripten PROXY_TO_PTHREAD path. main() runs on a
+   # worker spawned by emscripten itself (not by the RA C code). The browser
+   # main thread keeps DOM access; emscripten proxies sync calls.
+   LIBS += -s PROXY_TO_PTHREAD=1 -s OFFSCREENCANVAS_SUPPORT
+   DEFINES += -DEMSCRIPTEN_STACK_SIZE=$(STACK_SIZE)
+   override HAVE_THREADS = 1
+   override WASM_WORKERS = 1
+   override STACK_SIZE = 4194304
+# LVLLVL fork: only force ASYNC=1 when we don't have threads. With
+# HAVE_THREADS=1 OpenAL can run on a real pthread, so we don't need
+# ASYNCIFY's whole-wasm rewrite — which broke the EmulatorJS runtime
+# load when blob-loaded as a classic <script> in the maker tab.
 else ifeq ($(HAVE_AL), 1)
-   override ASYNC = 1
+   ifeq ($(HAVE_THREADS), 0)
+      override ASYNC = 1
+   endif
 endif
 
 ifeq ($(HAVE_SDL2), 1)
@@ -252,8 +283,22 @@ ifeq ($(HAVE_AL), 1)
 endif
 
 ifeq ($(HAVE_THREADS), 1)
+   # Match libretro-uae's threaded build (Makefile -platform=emscripten
+   # block): -pthread alone in emscripten 4.0.16 enables atomics but not
+   # bulk-memory consistently per-object. Adding the LLVM target features
+   # explicitly so wasm-ld doesn't reject --shared-memory at link time.
    LDFLAGS += -s MAXIMUM_MEMORY=4294967296 -pthread -s PTHREAD_POOL_SIZE=$(PTHREAD_POOL_SIZE)
-   CFLAGS += -pthread -s SHARED_MEMORY
+   CFLAGS += -pthread -matomics -mbulk-memory -s SHARED_MEMORY
+endif
+
+# Pass ASSERTIONS=1 (and optionally PTHREADS_DEBUG=1) to surface emscripten
+# runtime errors loudly instead of silent hangs. See LVLLVL-Amiga
+# thoughts/shared/handoffs/2026-05-12_threaded-puae-investigation.md
+ifneq ($(ASSERTIONS),)
+   LDFLAGS += -s ASSERTIONS=$(ASSERTIONS)
+endif
+ifeq ($(PTHREADS_DEBUG), 1)
+   LDFLAGS += -s PTHREADS_DEBUG=1
 endif
 
 ifeq ($(WASM_WORKERS), 1)
