@@ -139,7 +139,8 @@ EXPORTED_FUNCTIONS = _main,_malloc,_free,_load_state, \
                      _uprough_trace_clear,_uprough_trace_get_ptr, \
                      _uprough_trace_get_head,_uprough_trace_get_capacity, \
                      _uprough_set_exception_catch_mask,_uprough_get_exception_catch_mask, \
-                     _uprough_get_palette
+                     _uprough_get_palette,_uprough_step_n,_uprough_step_n_remaining, \
+                     _uprough_audio_get_all,_uprough_copper_get_state
 
 EXPORTS := Browser,callMain,cwrap,getValue,HEAPU8,FS,PATH,ERRNO_CODES,AL,abort,ENV,stringToNewUTF8,UTF8ToString,Browser,EmscriptenSendCommand,EmscriptenReceiveCommandReply,EmulatorJSGetState,EmulatorJSGetMemoryData
 
