@@ -145,7 +145,11 @@ EXPORTED_FUNCTIONS = _main,_malloc,_free,_load_state, \
                      _uprough_get_cia,_uprough_get_uae_config, \
                      _uprough_set_read_watch_exported,_uprough_clear_read_watch_exported, \
                      _uprough_get_disk,_uprough_get_fpu_regs, \
-                     _uprough_get_sprite_data,_uprough_audio_peek
+                     _uprough_get_sprite_data,_uprough_audio_peek, \
+                     _uprough_regs_ring_set_enabled,_uprough_regs_ring_get_enabled, \
+                     _uprough_regs_ring_clear,_uprough_regs_ring_get_ptr, \
+                     _uprough_regs_ring_get_head,_uprough_regs_ring_get_capacity, \
+                     _uprough_regs_ring_get_slot_u32
 
 EXPORTS := Browser,callMain,cwrap,getValue,HEAPU8,FS,PATH,ERRNO_CODES,AL,abort,ENV,stringToNewUTF8,UTF8ToString,Browser,EmscriptenSendCommand,EmscriptenReceiveCommandReply,EmulatorJSGetState,EmulatorJSGetMemoryData
 
