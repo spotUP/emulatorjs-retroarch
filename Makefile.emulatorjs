@@ -149,7 +149,10 @@ EXPORTED_FUNCTIONS = _main,_malloc,_free,_load_state, \
                      _uprough_regs_ring_set_enabled,_uprough_regs_ring_get_enabled, \
                      _uprough_regs_ring_clear,_uprough_regs_ring_get_ptr, \
                      _uprough_regs_ring_get_head,_uprough_regs_ring_get_capacity, \
-                     _uprough_regs_ring_get_slot_u32
+                     _uprough_regs_ring_get_slot_u32, \
+                     _uprough_state_save,_uprough_state_restore, \
+                     _uprough_state_is_saved,_uprough_state_clear, \
+                     _uprough_get_mmu_regs
 
 EXPORTS := Browser,callMain,cwrap,getValue,HEAPU8,FS,PATH,ERRNO_CODES,AL,abort,ENV,stringToNewUTF8,UTF8ToString,Browser,EmscriptenSendCommand,EmscriptenReceiveCommandReply,EmulatorJSGetState,EmulatorJSGetMemoryData
 
