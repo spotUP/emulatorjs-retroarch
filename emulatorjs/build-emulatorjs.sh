@@ -65,7 +65,7 @@ noCHD=("mame2003" "mame2003_plus" "pcsx_rearmed" "genesis_plus_gx" "genesis_plus
 no7Zip=("bsnes")
 
 for f in $(ls -v *_emscripten.bc); do
-  name=`echo "$f" | sed "s/\(_libretro_emscripten\|\).bc$//"`
+  name=`echo "$f" | sed -E "s/(_libretro_emscripten)?\.bc$//"`
   async=1
   min_async=0
   sevenZip=1
