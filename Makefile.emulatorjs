@@ -369,6 +369,10 @@ ifeq ($(DEBUG), 1)
    CFLAGS += -O1 -g -gsource-map
 else
    LDFLAGS += -O3
+   # Keep the wasm name section so worker RuntimeError stacks symbolicate
+   # (uprough: hunting the 18.3s "function signature mismatch" crash).
+   # --profiling-funcs adds names only — no codegen or perf impact.
+   LDFLAGS += --profiling-funcs
    # WARNING: some optimizations can break some cores (ex: LTO breaks tyrquake)
    ifeq ($(LTO), 1)
       LDFLAGS += -flto
