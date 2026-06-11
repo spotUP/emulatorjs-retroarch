@@ -159,11 +159,23 @@ EXPORTED_FUNCTIONS = _main,_malloc,_free,_load_state, \
                      _uprough_set_beamtrap,_uprough_clear_beamtrap,_uprough_beamtrap_hit, \
                      _retro_serialize,_retro_serialize_size,_retro_unserialize, \
                      _uprough_request_unserialize,_uprough_unserialize_status, \
-                     _uprough_halt_cause, \
+                     _uprough_halt_cause,_uprough_halt_detail, \
                      _uprough_cop_set_breakpoint,_uprough_cop_clear_breakpoints,_uprough_cop_bp_count, \
                      _uprough_dmalog_set_enabled,_uprough_dmalog_get_enabled, \
                      _uprough_dmalog_set_filter,_uprough_dmalog_clear, \
-                     _uprough_dmalog_get_ptr,_uprough_dmalog_get_head,_uprough_dmalog_get_capacity
+                     _uprough_dmalog_get_ptr,_uprough_dmalog_get_head,_uprough_dmalog_get_capacity, \
+                     _uprough_run_frames,_uprough_run_frames_remaining, \
+                     _uprough_unserialize_then_run, \
+                     _uprough_capture_request,_uprough_capture_status, \
+                     _uprough_capture_size,_uprough_capture_frame, \
+                     _uprough_clear_watch_slot,_uprough_watch_count, \
+                     _uprough_blitlog_set_enabled,_uprough_blitlog_get_enabled, \
+                     _uprough_blitlog_clear,_uprough_blitlog_get_ptr, \
+                     _uprough_blitlog_get_head,_uprough_blitlog_get_capacity, \
+                     _uprough_blit_break_range, \
+                     _uprough_irqlog_set_enabled,_uprough_irqlog_get_enabled, \
+                     _uprough_irqlog_clear,_uprough_irqlog_get_ptr, \
+                     _uprough_irqlog_get_head,_uprough_irqlog_get_capacity
 
 EXPORTS := Browser,callMain,cwrap,getValue,HEAPU8,FS,PATH,ERRNO_CODES,AL,abort,ENV,stringToNewUTF8,UTF8ToString,Browser,EmscriptenSendCommand,EmscriptenReceiveCommandReply,EmulatorJSGetState,EmulatorJSGetMemoryData
 
