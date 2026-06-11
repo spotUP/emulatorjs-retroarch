@@ -132,7 +132,7 @@ EXPORTED_FUNCTIONS = _main,_malloc,_free,_load_state, \
                      _uprough_set_halt,_uprough_get_halted,_uprough_get_halt_req,_uprough_step, \
                      _uprough_set_breakpoint,_uprough_clear_breakpoint,_uprough_clear_all_breakpoints, \
                      _uprough_get_breakpoints_ptr,_uprough_get_breakpoint_count, \
-                     _uprough_write_memory,_uprough_disasm, \
+                     _uprough_write_memory,_uprough_read_memory,_uprough_disasm, \
                      _uprough_set_reg,_uprough_set_watch,_uprough_clear_watch, \
                      _uprough_get_chipset_regs,_uprough_chipset_snapshot_size, \
                      _uprough_trace_set_enabled,_uprough_trace_get_enabled, \
@@ -155,7 +155,10 @@ EXPORTED_FUNCTIONS = _main,_malloc,_free,_load_state, \
                      _uprough_state_save_slot,_uprough_state_restore_slot, \
                      _uprough_state_is_saved_slot,_uprough_state_clear_slot, \
                      _uprough_state_slot_count, \
-                     _uprough_get_mmu_regs
+                     _uprough_get_mmu_regs, \
+                     _uprough_set_beamtrap,_uprough_clear_beamtrap,_uprough_beamtrap_hit, \
+                     _retro_serialize,_retro_serialize_size,_retro_unserialize, \
+                     _uprough_request_unserialize,_uprough_unserialize_status
 
 EXPORTS := Browser,callMain,cwrap,getValue,HEAPU8,FS,PATH,ERRNO_CODES,AL,abort,ENV,stringToNewUTF8,UTF8ToString,Browser,EmscriptenSendCommand,EmscriptenReceiveCommandReply,EmulatorJSGetState,EmulatorJSGetMemoryData
 
