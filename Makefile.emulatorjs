@@ -165,7 +165,7 @@ EXPORTED_FUNCTIONS = _main,_malloc,_free,_load_state, \
                      _uprough_dmalog_set_filter,_uprough_dmalog_clear, \
                      _uprough_dmalog_get_ptr,_uprough_dmalog_get_head,_uprough_dmalog_get_capacity, \
                      _uprough_run_frames,_uprough_run_frames_remaining, \
-                     _uprough_unserialize_then_run, \
+                     _uprough_unserialize_then_run,_uprough_unserialize_set_frame, \
                      _uprough_capture_request,_uprough_capture_status, \
                      _uprough_capture_size,_uprough_capture_frame, \
                      _uprough_clear_watch_slot,_uprough_watch_count, \
