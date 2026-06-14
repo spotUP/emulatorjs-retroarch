@@ -398,6 +398,9 @@ else
       LDFLAGS += -flto
    endif
    CFLAGS += -O3
+   # WASM SIMD: match the core's -msimd128 so the RetroArch frontend objects
+   # also auto-vectorize under -O3. Universal browser support since 2021.
+   CFLAGS += -msimd128
 endif
 
 CFLAGS += -Wall -I. -Ilibretro-common/include -Ideps/7zip -std=gnu99
